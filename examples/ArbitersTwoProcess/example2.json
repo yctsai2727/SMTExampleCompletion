@@ -1,0 +1,9 @@
+{
+  "comment": "Arbiters Two Process - target to generate model with 2 states",
+  "assumptions": ["true"],
+  "guarantees": ["G(p->Fgp)", "G(q->Fgq)", "G(!(gp & gq))"],
+  "target": "ArbitersTwoProcess/example1.dot",
+  "input_atomic_propositions": ["p", "q"], 
+  "output_atomic_propositions": ["gp", "gq"], 
+  "traces": ["!p & !q.gp & !gq"]
+}

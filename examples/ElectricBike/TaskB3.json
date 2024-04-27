@@ -1,0 +1,19 @@
+{
+  "assumptions": [
+    "G((!brake & Xbrake) -> (XXbrake & XXXbrake))", 
+    "G((brake & X!brake) -> (XX!brake & XXX!brake))"
+  ], 
+  "guarantees": ["G(!(assist & brakeregenerate))", 
+    "G(!(assist & idle))", "G(!(idle & brakeregenerate))", 
+    "G(idle | brakeregenerate | assist)", 
+    "G(assist -> !(X(brakeregenerate)))",
+    "G(brakeregenerate -> !(X(assist)))",
+    "G(brake -> F(brakeregenerate))",
+    "G((brake & brakeregenerate)->(brakeregenerate W !brake))",
+    "G(!brake -> F(assist))",
+    "G((!brake & assist)->(assist W brake))"],
+  "input_atomic_propositions": ["brake"],
+  "output_atomic_propositions": ["assist", "brakeregenerate", "idle"],
+  "traces" : [],
+  "target" : ""
+}

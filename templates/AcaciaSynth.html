@@ -1,0 +1,49 @@
+{% extends "LTLForm.html" %}
+
+{% block title %} Acacia-Synth: Synthesis With A Touch Of User Interaction {% endblock %}
+{% block traces %}
+	<fieldset id="traces">
+		<div class="mb-3">
+			<label for="traces_textarea" class="form-label">Traces</label>
+			<textarea style="width: 100%; display: none;" name="traces" id="traces_textarea" placeholder="request_0 & request_1.grant_0 & !grant_1;!request_0 & !request_1.!grant_0 & grant_1"></textarea>
+		</div>
+	</fieldset>
+	<fieldset id="target">
+		<div class="mb-3">
+			<label for="target_file" class="form-label">Target File</label>
+			<input class="form-control" type="file" id="target_file" name="target">
+		</div>
+	</fieldset>
+	<fieldset class="row mb-3">
+		<div class="col-auto">
+			<button type="button" class="btn btn-primary" id="submit">
+				<span class="spinner-border spinner-border-sm visually-hidden loading" role="status" aria-hidden="true"></span>
+				<span class="visually-hidden loading">Loading...</span>
+				<span class="submit-text">Submit</span>
+			</button>
+		</div>
+	</fieldset>
+{% endblock traces %}
+
+{% block footer %}
+	<div class="row mb-3">
+		<figure class="figure col-7" id="image-container">
+			<svg xmlns="http://www.w3.org/2000/svg" class="svg" width="100%" height="100%">
+			</svg>
+			<figcaption class="figure-caption"></figcaption>
+		</figure>
+		<ul class="list-group list-group-flush col-5 visually-hidden">
+		</ul>
+	</div>
+	<div class="row mb-3">
+		<div class="col-auto visually-hidden downloader">
+			<a class="btn btn-primary" href="download/dot" role="button">Download DOT</a>
+		</div>
+		<div class="col-auto visually-hidden downloader">
+			<a class="btn btn-primary" href="download/pdf" role="button">Download PDF</a>
+		</div>
+		<div class="col-auto visually-hidden downloader target">
+			<a class="btn btn-primary" href="download/target" role="button">Download Target</a>
+		</div>
+	</div>
+{% endblock footer %}

@@ -1,0 +1,9 @@
+{
+  "comment": "Arbiters Three Process - generates target model",
+  "assumptions": ["true"],
+  "guarantees": ["G(p->Fgp)", "G(q->Fgq)", "G(r->Fgr)", "G(!(gp & gq))", "G(!(gr & gq))", "G(!(gp & gr))"], 
+  "input_atomic_propositions": ["p", "q", "r"], 
+  "output_atomic_propositions": ["gp", "gq", "gr"],
+  "target": "",
+  "traces": []
+}

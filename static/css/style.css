@@ -1,0 +1,16 @@
+.CodeMirror {
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+.blog-header {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.figure {
+    height: auto;
+}
+
+.figure .svg {
+    height: fit-content;
+}

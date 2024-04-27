@@ -1,0 +1,12 @@
+{
+	"comment": "Binary Adder",
+	"assumptions": ["true"],
+	"guarantees": [
+		"G(!even | !odd)",
+		"G(even | odd)"
+	],
+	"target": "BinaryAdder/example1.dot",
+	"input_atomic_propositions": ["p"], 
+	"output_atomic_propositions": ["even", "odd"], 
+	"traces": []
+}

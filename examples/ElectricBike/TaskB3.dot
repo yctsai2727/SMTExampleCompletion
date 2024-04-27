@@ -1,0 +1,13 @@
+digraph "examples/ElectricBike/TaskB3" {
+"()" [label="()"];
+"()(!brake.assist & !brakeregenerate & !idle)" [label="()(!brake.assist & !brakeregenerate & !idle)"];
+"()(brake.!assist & brakeregenerate & !idle)" [label="()(brake.!assist & brakeregenerate & !idle)"];
+"()" -> "()(!brake.assist & !brakeregenerate & !idle)"  [label="!brake/assist & !brakeregenerate & !idle"];
+"()" -> "()(brake.!assist & brakeregenerate & !idle)"  [label="brake/!assist & brakeregenerate & !idle"];
+"()(!brake.assist & !brakeregenerate & !idle)" -> "()(!brake.assist & !brakeregenerate & !idle)"  [label="!brake/assist & !brakeregenerate & !idle"];
+"()(!brake.assist & !brakeregenerate & !idle)" -> "()"  [label="brake/!assist & !brakeregenerate & idle"];
+"()(brake.!assist & brakeregenerate & !idle)" -> "()"  [label="!brake/!assist & !brakeregenerate & idle"];
+"()(brake.!assist & brakeregenerate & !idle)" -> "()(brake.!assist & brakeregenerate & !idle)"  [label="brake/!assist & brakeregenerate & !idle"];
+__start0 [label="", shape=none];
+__start0 -> "()"  [label=""];
+}

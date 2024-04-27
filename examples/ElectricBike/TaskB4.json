@@ -1,0 +1,23 @@
+{
+	"assumptions":[
+	"G((!brake & X(brake))->(X(X(brake))))",
+	"G((brake & X(!brake))->(X(X(!brake))))"
+	],
+	"guarantees":[
+		"G(!(a & bg))",
+		"G(!(a & i))","G(!(i & bg))",
+		"G(i | bg | a)",
+		"G(a->!(X(bg)))",
+		"G(bg->!(X(a)))",
+		"G(brake->F(bg))",
+		"G((brake & bg)->(bg W !brake))",
+		"G(!brake->F(a))",
+		"G((!brake & a)->(a W brake))",
+		"G(brake->(bg | X(bg)))",
+		"G(!brake->(a | X(a)))"
+	],
+	"input_atomic_propositions":["brake"],
+	"output_atomic_propositions":["a", "bg", "i"],
+	"traces":[],
+	"target":""
+}

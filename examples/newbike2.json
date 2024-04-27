@@ -1,0 +1,24 @@
+{
+	"assumptions":[
+		"true"
+	],
+	"guarantees":[
+		"G(ful -> !re)",
+		"G(!brk -> (!ri & !re))",
+		"G(spd -> !as)",
+		"G((brk & X brk & X X brk) -> X X ((re | ri) W !brk))",
+		"G((!brk & X (!brk) & X X (!brk)) -> ((X X((!spd -> as) W brk))))",
+		"G(re -> X(!as))",
+		"G(as -> X(!re))",
+		"G((re | ri) -> !as)"
+	],
+	"input_atomic_propositions":["brk", "spd", "ful"],
+	"output_atomic_propositions":["as", "re", "ri"],
+	"traces":[
+		"!brk & spd.!as & !re & !ri.brk & !ful.!as & re & !ri.brk & !ful.!as & re & !ri",
+		"brk & ful.!as & !re & ri",
+		"brk & !ful.!as & re & !ri.brk & ful.!as & !re & ri.!brk & !spd.as & !re & !ri",
+		"brk & !spd.as & !re & !ri.brk & spd.!as & !re & !ri.brk & !ful.!as & re & !ri"
+	],
+	"target":""
+}

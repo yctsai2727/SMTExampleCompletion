@@ -1,0 +1,16 @@
+{
+  "comment": "Arbiters Two Process - full arbiter",
+  "assumptions": ["true"],
+  "guarantees": ["G(p->Fgp)", "G(q->Fgq)", "G(!(gp & gq))",
+  	"G ((gp & X (!p & !gp)) -> X (p R !gp))",
+  	"G ((gq & X (!q & !gq)) -> X (q R !gq))",
+  	"G ((gp & G !p) -> (F !gp))",
+  	"G ((gq & G !q) -> (F !gq))",
+  	"p R !gp",
+  	"q R !gq"
+  ],
+  "target": "",
+  "input_atomic_propositions": ["p", "q"], 
+  "output_atomic_propositions": ["gp", "gq"], 
+  "traces": []
+}

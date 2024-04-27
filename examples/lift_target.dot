@@ -1,0 +1,68 @@
+digraph "static/temp_model_files/LearnedModel_389" {
+"0" [label="0", style=filled];
+"1" [label="0", style=filled];
+
+"0s" [label="0s", style=filled];
+"1s" [label="1s", style=filled];
+
+"b1,0" [label="b1,0", style=filled];
+"b0,1" [label="b0,1", style=filled];
+
+"b0,1s" [label="b0,1s", style=filled];
+"b1,0s" [label="b0,1s", style=filled];
+
+"b0b1,1" [label="b0,1s", style=filled];
+"b1b0,0" [label="b0,1s", style=filled];
+
+"0" -> "0"  [label="!b0 & !b1/f0 & !f1 & !serve"];
+"0" -> "1s"  [label="!b0 & b1/f1 & serve & !f0"];
+"0" -> "0s"  [label="b0 & !b1/f0 & serve & !f1"];
+"0" -> "b1,0s"  [label="b0 & b1/f0 & serve & !f1"];
+
+"1" -> "1"  [label="!b0 & !b1/!f0 & f1 & !serve"];
+"1" -> "1s"  [label="!b0 & b1/f1 & serve & !f0"];
+"1" -> "0s"  [label="b0 & !b1/f0 & serve & !f1"];
+"1" -> "b1,0s"  [label="b0 & b1/f0 & serve & !f1"];
+
+"0s" -> "0"  [label="!b0 & !b1/f0 & !f1 & !serve"];
+"0s" -> "b1,0"  [label="!b0 & b1/f0 & !f1 & !serve"];
+"0s" -> "0s"  [label="b0 & !b1/f0 & !f1 & serve"];
+"0s" -> "b1,0s"  [label="b0 & b1/f0 & !f1 & serve"];
+
+"1s" -> "1"  [label="!b0 & !b1/!f0 & f1 & !serve"];
+"1s" -> "1s"  [label="!b0 & b1/f0 & !f1 & serve"];
+"1s" -> "b0,1"  [label="b0 & !b1/!f0 & f1 & !serve"];
+"1s" -> "b0,1s"  [label="b0 & b1/!f0 & f1 & serve"];
+
+"b1,0" -> "1s"  [label="!b0 & !b1/!f0 & f1 & serve"];
+"b1,0" -> "1s"  [label="!b0 & b1/!f0 & f1 & serve"];
+"b1,0" -> "b0,1s"  [label="b0 & !b1/!f0 & f1 & serve"];
+"b1,0" -> "b0,1s"  [label="b0 & b1/!f0 & f1 & serve"];
+
+"b0,1" -> "0s"  [label="!b0 & !b1/f0 & serve & !f1"];
+"b0,1" -> "b1,0s"  [label="!b0 & b1/f0 & !f1 & serve"];
+"b0,1" -> "0s"  [label="b0 & !b1/f0 & serve & !f1"];
+"b0,1" -> "b1,0s"  [label="b0 & b1/f0 & serve & !f1"];
+
+"b0,1s" -> "b0,1"  [label="!b0 & !b1/!f0 & f1 & !serve"];
+"b0,1s" -> "b0,1"  [label="b0 & !b1/!f0 & f1 & !serve"];
+"b0,1s" -> "b0b1,1"  [label="!b0 & b1/!f0 & f1 & !serve"];
+"b0,1s" -> "b0b1,1"  [label="b0 & b1/!f0 & f1 & !serve"];
+
+"b1,0s" -> "b1,0"  [label="!b0 & !b1/f0 & !f1 & !serve"];
+"b1,0s" -> "b1,0"  [label="b0 & !b1/f0 & !f1 & !serve"];
+"b1,0s" -> "b1b0,0"  [label="!b0 & b1/f0 & !f1 & !serve"];
+"b1,0s" -> "b1b0,0"  [label="b0 & b1/f0 & !f1 & !serve"];
+
+"b0b1,1" -> "b1,0s" [label="!b0 & !b1/f0 & !f1 & serve"];
+"b0b1,1" -> "b1,0s" [label="b0 & !b1/f0 & !f1 & serve"];
+"b0b1,1" -> "b1,0s" [label="!b0 & b1/f0 & !f1 & serve"];
+"b0b1,1" -> "b1,0s" [label="b0 & b1/f0 & !f1 & serve"];
+
+"b1b0,0" -> "b0,1s" [label="!b0 & !b1/!f0 & f1 & serve"];
+"b1b0,0" -> "b0,1s" [label="b0 & !b1/!f0 & f1 & serve"];
+"b1b0,0" -> "b0,1s" [label="!b0 & b1/!f0 & f1 & serve"];
+"b1b0,0" -> "b0,1s" [label="b0 & b1/!f0 & f1 & serve"];
+__start0 [label="", shape=none];
+__start0 -> "0"  [label=""];
+}

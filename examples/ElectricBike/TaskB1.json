@@ -1,0 +1,16 @@
+{
+  "assumptions": ["true"], 
+  "guarantees": [
+  	"G(!(assist & brakeregenerate))", 
+    "G(!(assist & idle))",
+    "G(!(idle & brakeregenerate))", 
+    "G(idle | brakeregenerate | assist)", 
+    "G(assist -> !(X(brakeregenerate)))",
+    "G(brakeregenerate -> !(X(assist)))",
+    "G(brake -> F(brakeregenerate))",
+    "G(!brake -> F(assist))"],
+  "input_atomic_propositions": ["brake"],
+  "output_atomic_propositions": ["assist", "brakeregenerate", "idle"],
+  "traces" : [],
+  "target" : "ElectricBike/TaskB4.dot"
+}

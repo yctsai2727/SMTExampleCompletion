@@ -1,0 +1,13 @@
+{
+  "comment": "Arbiters Two Process with no grants granted subsequently one after the other - Added examples manually",
+  "assumptions": ["true"],
+  "guarantees": ["G(p->Fgp)", "G(q->Fgq)", "G (!(gp & gq))", "G(gp -> X(!gp & !gq))", "G(gq -> X(!gp & !gq))"],
+  "target": "",
+  "input_atomic_propositions": ["p", "q"], 
+  "output_atomic_propositions": ["gp", "gq"], 
+  "traces": [
+    "!p & q.!gp & gq",
+    "p & q.!gp & gq",
+    "!p & q.!gp & gq.!p & q.!gp & !gq.!p & q.!gp & gq"
+  ]
+}

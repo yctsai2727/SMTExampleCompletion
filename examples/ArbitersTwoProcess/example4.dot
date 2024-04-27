@@ -1,0 +1,19 @@
+digraph "examples/ArbitersTwoProcess/example4" {
+"()" [label="()"];
+"()(!request_0 & !request_1.grant_0 & !grant_1)" [label="()(!request_0 & !request_1.grant_0 & !grant_1)"];
+"()(!request_0 & request_1.!grant_0 & grant_1)" [label="()(!request_0 & request_1.!grant_0 & grant_1)"];
+"()" -> "()(!request_0 & !request_1.grant_0 & !grant_1)"  [label="!request_0 & !request_1/grant_0 & !grant_1"];
+"()" -> "()(!request_0 & request_1.!grant_0 & grant_1)"  [label="!request_0 & request_1/!grant_0 & grant_1"];
+"()" -> "()(!request_0 & request_1.!grant_0 & grant_1)"  [label="request_0 & !request_1/!grant_0 & grant_1"];
+"()" -> "()(!request_0 & request_1.!grant_0 & grant_1)"  [label="request_0 & request_1/!grant_0 & grant_1"];
+"()(!request_0 & !request_1.grant_0 & !grant_1)" -> "()(!request_0 & request_1.!grant_0 & grant_1)"  [label="!request_0 & !request_1/!grant_0 & grant_1"];
+"()(!request_0 & !request_1.grant_0 & !grant_1)" -> "()(!request_0 & request_1.!grant_0 & grant_1)"  [label="!request_0 & request_1/!grant_0 & grant_1"];
+"()(!request_0 & !request_1.grant_0 & !grant_1)" -> "()(!request_0 & request_1.!grant_0 & grant_1)"  [label="request_0 & !request_1/!grant_0 & grant_1"];
+"()(!request_0 & !request_1.grant_0 & !grant_1)" -> "()(!request_0 & request_1.!grant_0 & grant_1)"  [label="request_0 & request_1/!grant_0 & grant_1"];
+"()(!request_0 & request_1.!grant_0 & grant_1)" -> "()(!request_0 & !request_1.grant_0 & !grant_1)"  [label="!request_0 & !request_1/grant_0 & !grant_1"];
+"()(!request_0 & request_1.!grant_0 & grant_1)" -> "()(!request_0 & !request_1.grant_0 & !grant_1)"  [label="!request_0 & request_1/grant_0 & !grant_1"];
+"()(!request_0 & request_1.!grant_0 & grant_1)" -> "()(!request_0 & !request_1.grant_0 & !grant_1)"  [label="request_0 & !request_1/grant_0 & !grant_1"];
+"()(!request_0 & request_1.!grant_0 & grant_1)" -> "()(!request_0 & !request_1.grant_0 & !grant_1)"  [label="request_0 & request_1/grant_0 & !grant_1"];
+__start0 [label="", shape=none];
+__start0 -> "()"  [label=""];
+}

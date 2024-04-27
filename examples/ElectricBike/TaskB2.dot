@@ -1,0 +1,13 @@
+digraph "examples/ElectricBike/TaskB2" {
+"()" [label="()"];
+"()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)" [label="()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)"];
+"()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)(brake.!a & !i & bg)" [label="()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)(brake.!a & !i & bg)"];
+"()" -> "()"  [label="!brake/a & !i & !bg"];
+"()" -> "()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)"  [label="brake/!a & i & !bg"];
+"()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)" -> "()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)(brake.!a & !i & bg)"  [label="brake/!a & !i & bg"];
+"()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)" -> "()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)(brake.!a & !i & bg)"  [label="!brake/!a & bg & !i"];
+"()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)(brake.!a & !i & bg)" -> "()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)(brake.!a & !i & bg)"  [label="brake/!a & !i & bg"];
+"()(!brake.a & !i & !bg)(!brake.a & !i & !bg)(brake.!a & i & !bg)(brake.!a & !i & bg)" -> "()"  [label="!brake/!a & i & !bg"];
+__start0 [label="", shape=none];
+__start0 -> "()"  [label=""];
+}

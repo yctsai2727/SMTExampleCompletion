@@ -1,0 +1,10 @@
+digraph "examples/BinaryAdder/example1" {
+"()" [label="()"];
+"()(p.!even & odd)" [label="()(p.!even & odd)"];
+"()" -> "()"  [label="!p/even & !odd"];
+"()" -> "()(p.!even & odd)"  [label="p/!even & odd"];
+"()(p.!even & odd)" -> "()(p.!even & odd)"  [label="!p/!even & odd"];
+"()(p.!even & odd)" -> "()"  [label="p/even & !odd"];
+__start0 [label="", shape=none];
+__start0 -> "()"  [label=""];
+}

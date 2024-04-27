@@ -1,0 +1,13 @@
+{
+  "comment": "Arbiters Two Process - generates target model",
+  "assumptions": ["true"],
+  "guarantees": [
+    "G(request_0 ->F grant_0)",
+    "G(request_1 ->F grant_1)",
+    "G(!(grant_0 & grant_1))"
+  ], 
+  "input_atomic_propositions": ["request_0", "request_1"], 
+  "output_atomic_propositions": ["grant_0", "grant_1"],
+  "target": "ArbitersTwoProcess/example3.dot",
+  "traces": ["!request_0 & !request_1.!grant_0 & !grant_1"]
+}

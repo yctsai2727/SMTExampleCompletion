@@ -1,0 +1,43 @@
+digraph "examples/test" {
+"q0" [label="q0"];
+"q1" [label="q1"];
+"q2" [label="q2"];
+"q3" [label="q3"];
+"q0" -> "q0"  [label="!brk & !ful & spd/!as & !re & !ri"];
+"q0" -> "q0"  [label="!brk & ful & spd/!as & !re & !ri"];
+"q0" -> "q1"  [label="!brk & !ful & !spd/as & !re & !ri"];
+"q0" -> "q1"  [label="!brk & ful & !spd/as & !re & !ri"];
+"q0" -> "q2"  [label="brk & ful & spd/!as & !re & ri"];
+"q0" -> "q2"  [label="brk & ful & !spd/!as & !re & ri"];
+"q0" -> "q3"  [label="brk & !ful & spd/!as & re & !ri"];
+"q0" -> "q3"  [label="brk & !ful & !spd/!as & re & !ri"];
+
+"q1" -> "q1"  [label="!brk & !ful & spd/!as & !re & !ri"];
+"q1" -> "q1"  [label="!brk & ful & spd/!as & !re & !ri"];
+"q1" -> "q1"  [label="!brk & !ful & !spd/as & !re & !ri"];
+"q1" -> "q1"  [label="!brk & ful & !spd/as & !re & !ri"];
+"q1" -> "q0"  [label="brk & ful & spd/!as & !re & ri"];
+"q1" -> "q0"  [label="brk & ful & !spd/!as & !re & ri"];
+"q1" -> "q0"  [label="brk & !ful & spd/!as & !re & !ri"];
+"q1" -> "q0"  [label="brk & !ful & !spd/!as & !re & !ri"];
+
+"q2" -> "q0"  [label="!brk & !ful & spd/!as & !re & !ri"];
+"q2" -> "q0"  [label="!brk & ful & spd/!as & !re & !ri"];
+"q2" -> "q1"  [label="!brk & !ful & !spd/as & !re & !ri"];
+"q2" -> "q1"  [label="!brk & ful & !spd/as & !re & !ri"];
+"q2" -> "q2"  [label="brk & ful & spd/!as & !re & ri"];
+"q2" -> "q2"  [label="brk & ful & !spd/!as & !re & ri"];
+"q2" -> "q2"  [label="brk & !ful & spd/!as & !re & ri"];
+"q2" -> "q2"  [label="brk & !ful & !spd/!as & !re & ri"];
+
+"q3" -> "q3"  [label="brk & !ful & spd/!as & re & !ri"];
+"q3" -> "q3"  [label="brk & !ful & !spd/!as & re & !ri"];
+"q3" -> "q2"  [label="brk & ful & spd/!as & !re & ri"];
+"q3" -> "q2"  [label="brk & ful & !spd/!as & !re & ri"];
+"q3" -> "q0"  [label="!brk & ful & spd/!as & !re & !ri"];
+"q3" -> "q0"  [label="!brk & ful & !spd/!as & !re & !ri"];
+"q3" -> "q0"  [label="!brk & !ful & spd/!as & !re & !ri"];
+"q3" -> "q0"  [label="!brk & !ful & !spd/!as & !re & !ri"];
+__start0 [label="", shape=none];
+__start0 -> "q0"  [label=""];
+}

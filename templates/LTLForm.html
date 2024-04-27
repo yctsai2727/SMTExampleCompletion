@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-4">
+		<nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4 border-end">
+			<nav class="nav nav-pills flex-column">
+				<a class="nav-link" href="#ltl">LTL Formulas: </a>
+				<nav class="nav nav-pills flex-column">
+					<a class="nav-link ms-3 my-1" href="#assumptions">Assumptions</a>
+					<a class="nav-link ms-3 my-1" href="#guarantees">Guarantees</a>
+				</nav>
+				<a class="nav-link" href="#io">I/O: </a>
+				<nav class="nav nav-pills flex-column">
+					<a class="nav-link ms-3 my-1" href="#io-i">Input Propositions</a>
+					<a class="nav-link ms-3 my-1" href="#io-o">Output Propositions</a>
+				</nav>
+				<a class="nav-link" href="#traces">Traces</a>
+				<a class="nav-link" href="#target">Target</a>
+				<a class="nav-link">Examples: </a>
+				<nav class="nav nav-pills flex-column">
+					<a class="nav-link ms-3 my-1" href="#ltl" id="SimpleArbiter2">Simple Arbiter n=2 </a>
+					<a class="nav-link ms-3 my-1" href="#ltl" id="SimpleArbiter3">Simple Arbiter n=3 </a>
+					<a class="nav-link ms-3 my-1" href="#ltl" id="LiftFloor3">Lift floors=3 </a>
+				</nav>
+			</nav>
+		</nav>
+	</div>
+	<div class="col-8" data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-smooth-scroll="true" tabindex="0">
+		<form action="/" method="POST" class="row" id="{{ type }}-form" enctype="multipart/form-data">
+			<fieldset id="ltl">
+				<div class="mb-3" id="assumptions">
+					<label for="assumptions_textarea" class="form-label">Assumptions</label>
+					<textarea style="width: 100%; display: none;" name="assumptions" id="assumptions_textarea" placeholder="true"></textarea>
+				</div>
+				<div class="mb-3" id="guarantees">
+					<label for="guarantees_textarea" class="form-label">Guarantees</label>
+					<textarea name="guarantees" id="guarantees_textarea" placeholder="G (request_0 -> F grant_0) & G (request_1 -> F grant_1)"></textarea>
+				</div>
+			</fieldset>
+			<fieldset id="io">
+				<div class="mb-3" id="io-i">
+					<label for="input_textarea" class="form-label">Input Propositions</label>
+					<textarea name="inputs" id="inputs_textarea" placeholder="request_0, request_1"></textarea>
+				</div>
+				<div class="mb-3" id="io-o">
+					<label for="output_textarea" class="form-label">Output Propositions</label>
+					<textarea style="width: 100%; display: none;" name="outputs" id="outputs_textarea" placeholder="grant_0, grant_1"></textarea>
+				</div>
+			</fieldset>
+			<fieldset id="kvalue">
+				<div class="mb-3" id="kvalue-div">
+					<label for="kvalue_input" class="form-label">Value of k</label>
+					<input name="kvalue" class="form-control" id="kvalue_input" placeholder="2">
+				</div>
+			</fieldset>
+			{% block traces %} {% endblock traces %}
+		</form>
+	</div>
+</div>
+{% block footer %} {% endblock footer %}
+{% endblock content %}
