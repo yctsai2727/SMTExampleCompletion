@@ -36,7 +36,6 @@ def build_strix(LTL_formula, I, O):
 	return ""
 
 def build_UCB(LTL_formula, I, O, k=2, limit=10):
-	global UCBWrapper
 	UCBWrapper = UCB(k, LTL_formula, I, O)
 	if UCBWrapper.ucb is None:
 		if (k+1 > limit):
@@ -59,7 +58,6 @@ class UCB(object):
 		# Compute the antichain
 		self.ucb = None
 		self.antichain_heads = []
-		self.unreal_antichain_heads = []
 		if not (self.compute_winning(psi, input_atomic_propositions, 
 							 output_atomic_propositions)):
 			return None
@@ -84,7 +82,8 @@ class UCB(object):
 			",".join(outputs), 
 			self.k)
 		#command = "multipass exec bar -- " + command
-		logger.debug(command)
+		#logger.debug(command)
+		print(command)
 		try:
 			op = subprocess.run(command, shell=True, capture_output=True)
 			captureUCB = False
@@ -104,16 +103,16 @@ class UCB(object):
 					captureAntichain = True
 				elif l == "ANTICHAINEND":
 					captureAntichain = False
-				elif l == "UNREALANTICHAIN":
-					captureUnrealAnti = True
-				elif l == "UNREALANTICHAINEND":
-					captureUnrealAnti = False
+				# elif l == "UNREALANTICHAIN":
+				# 	captureUnrealAnti = True
+				# elif l == "UNREALANTICHAINEND":
+				# 	captureUnrealAnti = False
 				elif captureUCB:
 					automata_lines.append(l)
 				elif captureAntichain:
 					antichain_lines.append(l)
-				elif captureUnrealAnti:
-					unreal_antichain_lines.append(l)
+				# elif captureUnrealAnti:
+				# 	unreal_antichain_lines.append(l)
 			if len(automata_lines) == 0:
 				print(command)
 				self.formula_error = True
@@ -132,11 +131,11 @@ class UCB(object):
 			list_item = list(map(lambda x: int(x), line.strip('{ }\n').split(" ")))
 			logger.info(list_item)
 			self.antichain_heads.append(list_item)
-		logger.info("Maximal Elements of Unrealizable Antichain: ")
-		for line in unreal_antichain_lines:
-			list_item = list(map(lambda x: int(x), line.strip('{ }\n').split(" ")))
-			logger.info(list_item)
-			self.unreal_antichain_heads.append(list_item)
+		# logger.info("Maximal Elements of Unrealizable Antichain: ")
+		# for line in unreal_antichain_lines:
+		# 	list_item = list(map(lambda x: int(x), line.strip('{ }\n').split(" ")))
+		# 	logger.info(list_item)
+		# 	self.unreal_antichain_heads.append(list_item)
 		if len(antichain_lines) == 0:
 			self.antichain_heads.append([0]*self.ucb.num_states())
 		return True
@@ -170,6 +169,8 @@ class UCB(object):
 				continue
 			for edge in self.ucb.out(state):
 				if (edge.cond & edge_label != buddy.bddfalse):
+					if state==0 and edge.dst==1:
+						print("trigger")
 					dst_state_vector[edge.dst] = max(
 						dst_state_vector[edge.dst], 
 						(state_vector[state] + 

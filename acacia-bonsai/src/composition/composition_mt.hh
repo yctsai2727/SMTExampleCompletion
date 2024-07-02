@@ -310,19 +310,13 @@ void composition_mt::solve_game(safety_game &game)
                     vectors::X_and_bitset<
                         vectors::ARRAY_IMPL<VECTOR_ELT_T, vnonbools.value>,
                         vbitsets.value>>;
-                using SpecializedUpset = upsets::ARRAY_AND_BITSET_DOWNSET_IMPL<
-                    vectors::X_and_bitset<
-                        vectors::ARRAY_IMPL<VECTOR_ELT_T, vnonbools.value>,
-                        vbitsets.value>>;
-                auto skn = K_BOUNDED_SAFETY_AUT_IMPL<SpecializedDownset, SpecializedUpset>(game.aut, opt_Kmin, opt_K, opt_Kinc, all_inputs, all_outputs);
+                auto skn = K_BOUNDED_SAFETY_AUT_IMPL<SpecializedDownset>(game.aut, opt_Kmin, opt_K, opt_Kinc, all_inputs, all_outputs);
                 assert(game.safe);
                 auto current_safe = cast_downset<SpecializedDownset>(*game.safe);
-                auto current_unsafe = cast_downset<SpecializedUpset>(*game.unsafe);
-                auto res = skn.Dualsolve(current_safe, current_unsafe, invariant);
+                auto res = skn.Solve(current_safe, invariant);
                 if (res.has_value())
                 {
-                  game.safe = std::make_shared<GenericDownset>(cast_downset<GenericDownset>(res.value().first));
-                  game.unsafe = std::make_shared<GenericUpset>(cast_downset<GenericUpset>(res.value().second));
+                  game.safe = std::make_shared<GenericDownset>(cast_downset<GenericDownset>(res.value()));
                 }
                 else
                   game.safe = nullptr;
@@ -342,19 +336,13 @@ void composition_mt::solve_game(safety_game &game)
               vectors::X_and_bitset<
                   vectors::VECTOR_IMPL<VECTOR_ELT_T>,
                   vbitsets.value>>;
-          using SpecializedUpset = upsets::VECTOR_AND_BITSET_DOWNSET_IMPL<
-              vectors::X_and_bitset<
-                  vectors::VECTOR_IMPL<VECTOR_ELT_T>,
-                  vbitsets.value>>;
-          auto skn = K_BOUNDED_SAFETY_AUT_IMPL<SpecializedDownset, SpecializedUpset>(game.aut, opt_Kmin, opt_K, opt_Kinc, all_inputs, all_outputs);
+          auto skn = K_BOUNDED_SAFETY_AUT_IMPL<SpecializedDownset>(game.aut, opt_Kmin, opt_K, opt_Kinc, all_inputs, all_outputs);
           assert(game.safe);
           auto current_safe = cast_downset<SpecializedDownset>(*game.safe);
-          auto current_unsafe = cast_downset<SpecializedUpset>(*game.unsafe);
-          auto res = skn.Dualsolve(current_safe, current_unsafe, invariant);
+          auto res = skn.Solve(current_safe, invariant);
           if (res.has_value())
           {
-            game.safe = std::make_shared<GenericDownset>(cast_downset<GenericDownset>(res.value().first));
-            game.unsafe = std::make_shared<GenericUpset>(cast_downset<GenericUpset>(res.value().second));
+            game.safe = std::make_shared<GenericDownset>(cast_downset<GenericDownset>(res.value()));
           }
           else
             game.safe = nullptr;
@@ -427,7 +415,7 @@ int composition_mt::epilogue(std::string synth_fname)
   if (!synth_fname.empty())
   {
     r.set_globals();
-    auto skn = K_BOUNDED_SAFETY_AUT_IMPL<GenericDownset, GenericUpset>(r.aut, opt_Kmin, opt_K, opt_Kinc, all_inputs, all_outputs);
+    auto skn = K_BOUNDED_SAFETY_AUT_IMPL<GenericDownset>(r.aut, opt_Kmin, opt_K, opt_Kinc, all_inputs, all_outputs);
     skn.synthesis(*r.safe, synth_fname, invariant);
   }
 
@@ -875,18 +863,6 @@ safety_game composition_mt::prepare_formula(spot::formula f, bool check_real, un
   for (size_t i = vectors::bool_threshold; i < aut->num_states(); ++i)
     all_k[i] = 0;
   ret.safe = std::make_shared<GenericDownset>(GenericDownset::value_type(all_k));
-
-  for (size_t i = 0; i < aut->num_states(); ++i)
-  {
-    auto base = utils::vector_mm<VECTOR_ELT_T>(aut->num_states(), -1);
-    base[i] = opt_Kmin;
-    if (ret.unsafe == nullptr)
-    {
-      ret.unsafe = std::make_shared<GenericUpset>(GenericUpset::value_type(base));
-    }
-    else
-      ret.unsafe->insert(GenericUpset::value_type(base));
-  }
 
   if (want_time)
   {

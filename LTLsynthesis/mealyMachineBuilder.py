@@ -42,18 +42,19 @@ def generalization_algorithm(premealy_machine, merging_strategy, UCBWrapper):
 	i = 0
 	for i in range(len(states)):
 		s = get_state_from_rank(rank_state_dict[i], states)
-		logger.debug("Checking state {} with rank {}".format(
+		print("Checking state {} with rank {}".format(
 			s.state_id, s.rank))
 		logger.debug("Rant state dict: " + str(rank_state_dict))
 		merge_pairs = get_compatible_nodes(states, s, exclude_pairs)
 		merge_pairs = sorted(merge_pairs, key=functools.cmp_to_key(merging_strategy))
-		
+
 		while (len(merge_pairs) > 0):
 			merge_pair = merge_pairs[0]
 			merge_pairs = merge_pairs[1:]
 			if is_excluded(merge_pair, exclude_pairs):
 				continue
 			ts = time.time()
+			print(list(map(lambda a:a.rank,premealy_machine.states)))
 			premealy_machine, exclude_pairs, rank_state_dict, isMerged = merge_compatible_nodes(
 				merge_pair, exclude_pairs, 
 				rank_state_dict, premealy_machine, UCBWrapper)
@@ -99,6 +100,7 @@ def merge_compatible_nodes(pair, exclude_pairs, rank_state_dict,
 	mealy_machine, UCBWrapper):
 	old_mealy_machine = copy.deepcopy(mealy_machine)
 	for st in old_mealy_machine.states:
+		#print(st.rank)
 		st.counting_function = get_state_from_id(st.state_id,mealy_machine.states).counting_function
 	old_rank_state_dict = copy.deepcopy(rank_state_dict)
 	merged = False
@@ -116,7 +118,7 @@ def merge_compatible_nodes(pair, exclude_pairs, rank_state_dict,
 		exclude_pairs.append(pair)
 	else:
 		initialize_counting_function(mealy_machine, UCBWrapper)
-		if not checkCFSafety(mealy_machine):
+		if not checkCFSafety(mealy_machine,UCBWrapper):
 			mealy_machine = old_mealy_machine
 			rank_state_dict = old_rank_state_dict
 			exclude_pairs.append(pair)

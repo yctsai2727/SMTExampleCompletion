@@ -41,7 +41,6 @@
 /// \brief Wrapper class around a UcB to pass as the deterministic safety
 /// automaton S^K_N, for N a given UcB.
 template <class SetOfStates,
-          class DualSetOfStates,
           class IOsPrecomputationMaker,
           class ActionerMaker,
           class InputPickerMaker>
@@ -83,7 +82,7 @@ public:
     }
   }
 
-  std::optional<SetOfStates> solve(SetOfStates &F, bdd invariant)
+  std::optional<SetOfStates> Solve(SetOfStates &F, bdd invariant)
   {
     int K = Kfrom;
 
@@ -136,75 +135,6 @@ public:
               vec[i] = s[i] + Kinc;
             // Other entries are set to 0 by initialization, since they are bool.
             return State (vec); });
-        verb_do(1, vout << "Done" << std::endl);
-        continue;
-      }
-
-      // verb_do (1, vout << "Loop# " << loopcount << ", F of size " << F.size () << std::endl);
-    } while (1);
-
-    std::abort();
-    return std::nullopt;
-  }
-
-  std::optional<std::pair<SetOfStates,DualSetOfStates>> Dualsolve(SetOfStates &F,DualSetOfStates &G, bdd invariant){
-    int K = Kfrom;
-    // Precompute the input and output actions.
-    verb_do (0,vout<<"triggering here"<<std::endl);
-    verb_do(1, vout << "IOS Precomputer with invariant " << bdd_to_formula(invariant) << "..." << std::endl);
-    auto inputs_to_ios = get_inputs_to_ios(invariant);
-    // ^ ios_precomputers::detail::standard_container<shared_ptr<spot::twa_graph>, vector<pair<int, int>>>
-    verb_do(1, vout << "Make actions..." << std::endl);
-    auto actioner = actioner_maker.make(aut, inputs_to_ios, K);
-    verb_do(1, vout << "Fetching IO actions" << std::endl);
-    auto input_output_fwd_actions = actioner.actions(); // list<pair<bdd, list<action_vec>>>
-    verb_do(1, io_stats(input_output_fwd_actions));
-
-    int loopcount = 0;
-
-    utils::vector_mm<VECTOR_ELT_T> init(aut->num_states());
-    init.assign(aut->num_states(), -1);
-    init[aut->get_init_state_number()] = 0;
-
-    auto input_picker = input_picker_maker.make(input_output_fwd_actions, actioner);
-
-    do
-    {
-      loopcount++;
-      verb_do(1, vout << "Loop# " << loopcount << ", F of size " << F.size() << ", G of size "<<G.size()<<std::endl);
-
-      auto &&input = input_picker(F);
-      auto &&dualInput = input_picker(G);
-      if (not input.has_value() && not dualInput.has_value()) // No more inputs, and we just tested that init was present
-      {
-        // if (!synth.empty ()) synthesis (F, synth, actioner);
-        return std::make_optional<std::pair<SetOfStates,DualSetOfStates>>(std::make_pair(std::move(F),std::move(G)));
-      }
-      
-      if (dualInput.has_value())
-        cpre_inplace(G,*dualInput, actioner);
-      if (input.has_value())
-        cpre_inplace(F, *input, actioner);
-
-      // verb_do(0,vout<<"Init State: "<<aut->get_init_state_number ()<<std::endl);
-
-      if (not F.contains(State(init)))
-      {
-        if (K >= Kto)
-          return std::nullopt;
-        verb_do(1, vout << "Incrementing K from " << K << " to " << K + Kinc << std::endl);
-        K += Kinc;
-        actioner.setK(K);
-        verb_do(1, {vout << "Adding Kinc to every vector..."; vout.flush (); });
-        auto func = [&](const State &s)
-                    {
-            auto vec = utils::vector_mm<VECTOR_ELT_T> (s.size (), 0);
-            for (size_t i = 0; i < vectors::bool_threshold; ++i)
-              vec[i] = s[i] + Kinc;
-            // Other entries are set to 0 by initialization, since they are bool.
-            return State (vec); };
-        F = F.apply(func);
-        G = G.apply(func);
         verb_do(1, vout << "Done" << std::endl);
         continue;
       }
@@ -269,41 +199,6 @@ private:
                     << F);
   }
 
-  template <typename Action, typename Actioner>
-  void cpre_inplace(DualSetOfStates &F, const Action &io_action, Actioner &actioner)
-  {
-
-    verb_do(2, vout << "Computing cpre(G) with G = " << std::endl
-                    << F);
-
-    const auto &[input, actions] = io_action.get();
-    utils::vector_mm<VECTOR_ELT_T> v(aut->num_states(), -1);
-    auto vv = typename DualSetOfStates::value_type(v);
-    DualSetOfStates F1i(std::move(vv));
-    bool first_turn = true;
-    for (const auto &action_vec : actions)
-    {
-      verb_do(3, vout << "one_output_letter:" << std::endl);
-      verb_do (3, vout << "applying: "<<action_vec<< std::endl);
-      DualSetOfStates &&F1io = F.apply([this, &action_vec, &actioner](const auto &m)
-                                   {
-          auto&& ret = actioner.apply (m, action_vec, actioners::direction::backward);
-          verb_do (3, vout << "  " << m << " -> " << ret << std::endl);
-          return std::move (ret); });
-
-      if (first_turn)
-      {
-        F1i = std::move(F1io);
-        first_turn = false;
-      }
-      else
-        F1i.union_with(std::move(F1io));
-    }
-
-    F.intersect_with(std::move(F1i));
-    verb_do(2, vout << "G = " << std::endl
-                    << F);
-  }
 
   // get index of the first dominating element that dominates the vector v
   // Container can be SetOfStates, or std::vector
@@ -781,7 +676,6 @@ private:
 };
 
 template <class SetOfStates,
-          class DualSetOfStates,
           class IOsPrecomputationMaker,
           class ActionerMaker,
           class InputPickerMaker>
@@ -791,13 +685,13 @@ static auto k_bounded_safety_aut_maker(const spot::twa_graph_ptr &aut, int Kfrom
                                        const ActionerMaker &actioner_maker,
                                        const InputPickerMaker &input_picker_maker)
 {
-  return k_bounded_safety_aut_detail<SetOfStates,DualSetOfStates, IOsPrecomputationMaker, ActionerMaker, InputPickerMaker>(aut, Kfrom, Kto, Kinc, input_support, output_support, ios_precomputer_maker, actioner_maker, input_picker_maker);
+  return k_bounded_safety_aut_detail<SetOfStates, IOsPrecomputationMaker, ActionerMaker, InputPickerMaker>(aut, Kfrom, Kto, Kinc, input_support, output_support, ios_precomputer_maker, actioner_maker, input_picker_maker);
 }
 
-template <class SetOfStates,class DualSetOfStates = SetOfStates>
+template <class SetOfStates>
 static auto k_bounded_safety_aut(const spot::twa_graph_ptr &aut, int Kfrom, int Kto, int Kinc, bdd input_support, bdd output_support)
 {
-  return k_bounded_safety_aut_maker<SetOfStates,DualSetOfStates>(aut, Kfrom, Kto, Kinc,
+  return k_bounded_safety_aut_maker<SetOfStates>(aut, Kfrom, Kto, Kinc,
                                                  input_support, output_support,
                                                  IOS_PRECOMPUTER(),
                                                  ACTIONER(),

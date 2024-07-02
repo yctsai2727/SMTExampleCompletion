@@ -2,7 +2,7 @@ import spot, logging
 from aalpy.automata import MealyState, MealyMachine
 import buddy
 import itertools
-import LTLsynthesis.algorithm
+#from LTLsynthesis.algorithm import UCBwrapper
 import time, re
 
 logger = logging.getLogger('misc-logger')
@@ -41,9 +41,9 @@ def initialize_counting_function(mealy, UCBWrapper):
 		state.counting_function = [-1]*UCBWrapper.num_states
 	mealy.initial_state.counting_function[UCBWrapper.ucb.get_init_state_number()] = 0
 
-def checkCFSafety(mealy: MealyMachine):
+def checkCFSafety(mealy: MealyMachine,UCBWrapper):
 	ts = time.time()
-	UCBWrapper = LTLsynthesis.algorithm.UCBWrapper
+	#UCBWrapper = LTLsynthesis.algorithm.UCBWrapper
 	# Checking CF Safety of the new Mealy Machine
 	if not UCBWrapper.is_safe(mealy.initial_state.counting_function):
 		return False
@@ -65,13 +65,19 @@ def checkCFSafety(mealy: MealyMachine):
 
 		i_bdd = str_to_bdd(i, UCBWrapper.ucb)
 		o_bdd = str_to_bdd(state.output_fun[i], UCBWrapper.ucb)
-		
-		f_ = lowestUpperBound(UCBWrapper.get_transition_state(f1, 
-			i_bdd & o_bdd), f2)
+
+		#print("Before trans, f1:",f1,"f2:",f2)
+
+		f_ = lowestUpperBound(UCBWrapper.get_transition_state(f1, i_bdd & o_bdd), f2)
+
+		#print("After trans:",UCBWrapper.get_transition_state(f1, i_bdd & o_bdd))
+		# for e in UCBWrapper.ucb.edges():
+		# 	if e.src == 0 and e.dst ==1:
+		# 		print(bdd_to_str(e.cond & i_bdd & o_bdd))
 		#logger.info(trace)
 		if not UCBWrapper.is_safe(f_):
 			logger.debug("checking safety took {} seconds".format(time.time()-ts))
-			logger.info("Unsafe trace" + trace)
+			#print("Unsafe trace:", trace,"\nCorresponding state:",f_)
 			return False
 		if contains(f2, f_) and f_ != f2:
 			target_state.counting_function = f_;

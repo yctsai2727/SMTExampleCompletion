@@ -131,7 +131,7 @@ def complete_mealy_machine(mealy_machine, UCBWrapper, minimize_controller=False,
 				continue
 
 			initialize_counting_function(mealy_machine, UCBWrapper)
-			if not checkCFSafety(mealy_machine):
+			if not checkCFSafety(mealy_machine,UCBWrapper):
 				logger.warning("This mealy machine is unsuitable")
 				return mealy_machine
 

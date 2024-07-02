@@ -2,7 +2,7 @@ from CustomAALpy.FileHandler import visualize_automaton, save_automaton_to_file,
 import logging
 from flask import session
 from functools import reduce
-from LTLsynthesis.prefixTreeBuilder import build_prefix_tree, checkCFSafety
+from LTLsynthesis.prefixTreeBuilder import build_prefix_tree
 from LTLsynthesis.mealyMachineBuilder import isCrossProductCompatible, generalization_algorithm
 from LTLsynthesis.completion_phase import complete_mealy_machine
 from LTLsynthesis.utilities import *
@@ -11,7 +11,6 @@ from LTLsynthesis.UCBBuilder import UCB,build_UCB
 import time
 
 logger = logging.getLogger("misc-logger")
-
 # def build_ucb(LTL_formula, I, O,k):
 # 	global ucb, UCBWrapper
 # 	logger.debug("Checking if K is appropriate...")
@@ -80,20 +79,25 @@ def build_mealy(LTL_formula, I, O, traces, file_name, target, k = 2):
 	mealy_machine = build_prefix_tree(traces)
 	logger.info("Prefix Tree Mealy built")
 
+	#save_mealy_machile(mealy_machine, "static/temp_model_files/PreMachine", ['pdf'])
+
+	#print(mealy_machine)
+
 	# Check if K is appropriate for traces
-	logger.debug("Checking if K is appropriate for traces")
+	print("Checking if K is appropriate for traces")
 	while k_unsafe:
 		if k == k_max:
 			return None, {'msg': 'Traces unsafe', 'retry': True, 'k': k}
 		initialize_counting_function(mealy_machine, UCBWrapper)
-		if checkCFSafety(mealy_machine):
+		if checkCFSafety(mealy_machine,UCBWrapper):
 			logger.info("Traces is safe for k=" + str(k))
 			k_unsafe = False
 			break
+		print("Traces is unsafe for k=" + str(k))
 		k = k + 1
-		logger.debug("Traces is unsafe for k=" + str(k))
 		UCBWrapper = UCB(k, LTL_formula, I, O)
 
+	print("Passed trace check")
 	logger.info("Choosing K as " + str(k))
 
 	# Loading the target machine if it exists
@@ -105,7 +109,7 @@ def build_mealy(LTL_formula, I, O, traces, file_name, target, k = 2):
 			if k == k_max:
 				return None, {'msg': 'Target unsafe', 'retry': True, 'k': k}
 			initialize_counting_function(target_machine, UCBWrapper)
-			if checkCFSafety(target_machine):
+			if checkCFSafety(target_machine,UCBWrapper):
 				logger.info("Target is safe for k=" + str(k))
 				k_unsafe = False
 				break
@@ -163,5 +167,5 @@ def save_mealy_machile(mealy_machine, file_name, file_type = ['dot']):
 		save_automaton_to_file(
 			mealy_machine,
 			file_type=type,
-			path=file_name + '_' + str(session['number'])
+			path=file_name
 		)

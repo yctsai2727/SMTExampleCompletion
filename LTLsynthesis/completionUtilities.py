@@ -45,7 +45,7 @@ def check_state_mergeable(state, current_state, i_bdd, mealy_machine, UCBWrapper
 		current_state.transitions[i_str] = state
 		current_state.output_fun[i_str] = o_str
 		initialize_counting_function(mealy_machine, UCBWrapper)
-		if checkCFSafety(mealy_machine):
+		if checkCFSafety(mealy_machine,UCBWrapper):
 			cf = UCBWrapper.get_transition_state(current_state.counting_function, i_bdd & o_bdd)
 			logger.debug("Merging with node..")
 			logger.debug("Counting function of transition: " + str(cf))
