@@ -1,6 +1,5 @@
 from CustomAALpy.FileHandler import visualize_automaton, save_automaton_to_file, load_automaton_from_file
 import logging
-from flask import session
 from functools import reduce
 from LTLsynthesis.prefixTreeBuilder import build_prefix_tree
 from LTLsynthesis.mealyMachineBuilder import isCrossProductCompatible, generalization_algorithm
@@ -11,32 +10,6 @@ from LTLsynthesis.UCBBuilder import UCB,build_UCB
 import time
 
 logger = logging.getLogger("misc-logger")
-# def build_ucb(LTL_formula, I, O,k):
-# 	global ucb, UCBWrapper
-# 	logger.debug("Checking if K is appropriate...")
-# 	logger.debug("Checking if K is appropriate for LTL")
-# 	ts = time.time()
-# 	UCBWrapper = UCB(k, LTL_formula, I, O)
-# 	k_max = max(int(k * 1.5), 10)
-# 	while UCBWrapper.ucb is None:
-# 		if k == k_max:
-# 			return None, {'msg': 'Specification unsafe for k={}'.format(k), 'retry': True, 'k': k}
-# 		if UCBWrapper.internal_error:
-# 			return None, {
-# 				'msg': 'Internal Server Error: ' + UCBWrapper.error_msg,
-# 				'retry': False,
-# 				'k': k
-# 			}
-# 		if UCBWrapper.formula_error:
-# 			return None, {
-# 				'msg': 'Parsing Formula Error: ' + UCBWrapper.error_msg,
-# 				'retry': False,
-# 				'k': k
-# 			}
-# 		logger.debug("LTL Specification is unsafe for k=" + str(k))
-# 		k = k + 1
-# 		UCBWrapper = UCB(k, LTL_formula, I, O)
-# 	logger.debug("LTL Specification is safe for k=" + str(k))
 
 def build_mealy(LTL_formula, I, O, traces, file_name, target, k = 2):	
 	global ordered_inputs, bdd_inputs, ucb, UCBWrapper
@@ -79,10 +52,6 @@ def build_mealy(LTL_formula, I, O, traces, file_name, target, k = 2):
 	mealy_machine = build_prefix_tree(traces)
 	logger.info("Prefix Tree Mealy built")
 
-	#save_mealy_machile(mealy_machine, "static/temp_model_files/PreMachine", ['pdf'])
-
-	#print(mealy_machine)
-
 	# Check if K is appropriate for traces
 	print("Checking if K is appropriate for traces")
 	while k_unsafe:
@@ -97,7 +66,6 @@ def build_mealy(LTL_formula, I, O, traces, file_name, target, k = 2):
 		k = k + 1
 		UCBWrapper = UCB(k, LTL_formula, I, O)
 
-	print("Passed trace check")
 	logger.info("Choosing K as " + str(k))
 
 	# Loading the target machine if it exists
@@ -123,7 +91,6 @@ def build_mealy(LTL_formula, I, O, traces, file_name, target, k = 2):
 	mealy_machine = generalization_algorithm(mealy_machine, sort_merge_cand_by_min_cf, UCBWrapper)
 	logger.info("Phase 1: Merge phase is complete")
 
-	save_mealy_machile(mealy_machine, "static/temp_model_files/PreMachine", ['pdf'])
 	### STEP 2.5 ###
 	# Mark nodes in "pre-machine"
 	mark_nodes(mealy_machine)
@@ -147,21 +114,11 @@ def build_mealy(LTL_formula, I, O, traces, file_name, target, k = 2):
 				I, 
 				O, traces, 
 				file_name, target, k)
-	if target_machine is not None:
-		save_mealy_machile(target_machine, "static/temp_model_files/TargetModel", ['svg', 'pdf'])
-	save_mealy_machile(mealy_machine, "static/temp_model_files/LearnedModel", ['dot'])
 	cleaner_display(mealy_machine, UCBWrapper.ucb)
-	save_mealy_machile(mealy_machine, "static/temp_model_files/LearnedModel", ['svg', 'pdf'])
 	traces = shorten_traces(traces)
 	print_data(target_machine, mealy_machine, num_premachine_nodes, traces, k, UCBWrapper)
 	return mealy_machine, {'traces': traces, 'num_premachine_nodes': num_premachine_nodes, 'k': k}
 
-def display_mealy_machine(mealy_machine, file_name, file_type="pdf"):
-	visualize_automaton(
-		mealy_machine,
-		path="examples/" + file_name + '_' + str(session['number']),
-		file_type="pdf"
-	)
 def save_mealy_machile(mealy_machine, file_name, file_type = ['dot']):
 	for type in file_type:
 		save_automaton_to_file(

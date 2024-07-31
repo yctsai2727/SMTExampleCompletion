@@ -38,6 +38,6 @@ def SampleGenerate(n,l):
     f.close()
 
 if __name__ == "__main__":
-    SampleGenerate(8,6)
+    SampleGenerate(8,20)
     
 

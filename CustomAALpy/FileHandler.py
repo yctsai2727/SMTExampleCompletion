@@ -96,16 +96,6 @@ def save_automaton_to_file(automaton, path="LearnedModel", file_type='dot',
         try:
             graph.write(path=f'{path}.{file_type}', format=file_type if file_type != 'dot' else 'raw')
             print(f'Model saved to {path}.{file_type}.')
-
-            if visualize and file_type in {'pdf', 'png', 'svg'}:
-                try:
-                    import webbrowser
-                    abs_path = os.path.abspath(f'{path}.{file_type}')
-                    path = f'file:///{abs_path}'
-                    webbrowser.open(path)
-                except OSError:
-                    traceback.print_exc()
-                    print(f'Could not open the file {path}.{file_type}.', file=sys.stderr)
         except OSError:
             traceback.print_exc()
             print(f'Could not write to the file {path}.{file_type}.', file=sys.stderr)

@@ -66,18 +66,10 @@ def checkCFSafety(mealy: MealyMachine,UCBWrapper):
 		i_bdd = str_to_bdd(i, UCBWrapper.ucb)
 		o_bdd = str_to_bdd(state.output_fun[i], UCBWrapper.ucb)
 
-		#print("Before trans, f1:",f1,"f2:",f2)
-
 		f_ = lowestUpperBound(UCBWrapper.get_transition_state(f1, i_bdd & o_bdd), f2)
 
-		#print("After trans:",UCBWrapper.get_transition_state(f1, i_bdd & o_bdd))
-		# for e in UCBWrapper.ucb.edges():
-		# 	if e.src == 0 and e.dst ==1:
-		# 		print(bdd_to_str(e.cond & i_bdd & o_bdd))
-		#logger.info(trace)
 		if not UCBWrapper.is_safe(f_):
 			logger.debug("checking safety took {} seconds".format(time.time()-ts))
-			#print("Unsafe trace:", trace,"\nCorresponding state:",f_)
 			return False
 		if contains(f2, f_) and f_ != f2:
 			target_state.counting_function = f_;

@@ -8,33 +8,6 @@ import traceback
 
 logger = logging.getLogger('misc-logger')
 
-def build_strix(LTL_formula, I, O):
-	src_file = "/Users/mrudula/Downloads/strix"
-	command = "{} -f '{}' --ins=\"{}\" --outs=\"{}\" -m both".format(
-			src_file,
-			LTL_formula, 
-			",".join(I), 
-			",".join(O)) 
-	print(command)
-	try:
-		op = subprocess.run(command, shell=True, capture_output=True)
-		automata_lines = []
-		ucb = None
-		
-		for line in op.stdout.splitlines():
-			l = line.decode()
-			automata_lines.append(l)
-
-		for a in spot.automata('\n'.join(automata_lines[1:])):
-			ucb = a
-		with open("static/temp_model_files/StrixModel.svg", 'w') as f:
-			f.write(a.show().data)
-		return a.show().data
-	except Exception as e:
-		traceback.print_exc()
-
-	return ""
-
 def build_UCB(LTL_formula, I, O, k=2, limit=10):
 	UCBWrapper = UCB(k, LTL_formula, I, O)
 	if UCBWrapper.ucb is None:
@@ -131,11 +104,6 @@ class UCB(object):
 			list_item = list(map(lambda x: int(x), line.strip('{ }\n').split(" ")))
 			logger.info(list_item)
 			self.antichain_heads.append(list_item)
-		# logger.info("Maximal Elements of Unrealizable Antichain: ")
-		# for line in unreal_antichain_lines:
-		# 	list_item = list(map(lambda x: int(x), line.strip('{ }\n').split(" ")))
-		# 	logger.info(list_item)
-		# 	self.unreal_antichain_heads.append(list_item)
 		if len(antichain_lines) == 0:
 			self.antichain_heads.append([0]*self.ucb.num_states())
 		return True
@@ -169,8 +137,6 @@ class UCB(object):
 				continue
 			for edge in self.ucb.out(state):
 				if (edge.cond & edge_label != buddy.bddfalse):
-					if state==0 and edge.dst==1:
-						print("trigger")
 					dst_state_vector[edge.dst] = max(
 						dst_state_vector[edge.dst], 
 						(state_vector[state] + 

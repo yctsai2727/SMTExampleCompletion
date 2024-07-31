@@ -1,0 +1,8 @@
+{
+  "comment": "Weather Forecast Model",
+  "assumptions": ["true"],
+  "guarantees": ["G((T0 | Tm1 | Tm2) -> Alarm)","G(((T0 & Alarm) & X(T1)) -> X(Alarm))","G(((T1 & Alarm) & X(T1 | T2)) -> X(Off | Warn))"],
+  "target": "",
+  "input_atomic_propositions": ["Tm2","Tm1","T0","T1","T2"], 
+  "output_atomic_propositions": ["Off", "Warn","Alarm"]
+}
