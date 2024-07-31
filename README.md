@@ -1,4 +1,4 @@
-# SMTEC
+# SMT-EC
 
 This is a modern implementation of SMT-based example completion for reactive synthesis using antichain data structures.
 This is based on the theory published here: To be updated.
