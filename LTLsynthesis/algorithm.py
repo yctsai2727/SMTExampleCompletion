@@ -1,11 +1,10 @@
 from CustomAALpy.FileHandler import visualize_automaton, save_automaton_to_file, load_automaton_from_file
 import logging
-from functools import reduce
 from LTLsynthesis.prefixTreeBuilder import build_prefix_tree
 from LTLsynthesis.mealyMachineBuilder import isCrossProductCompatible, generalization_algorithm
 from LTLsynthesis.completion_phase import complete_mealy_machine
 from LTLsynthesis.utilities import *
-from LTLsynthesis.UCBBuilder import UCB,build_UCB
+from LTLsynthesis.UCBBuilder import UCB
 
 import time
 

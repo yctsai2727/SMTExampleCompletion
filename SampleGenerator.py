@@ -9,7 +9,7 @@ def FillOutput(temp, temp_range):
 
 
 def SampleGenerate(n,l):
-    f = open("examples/WeatherForcast/sample.txt","w")
+    f = open("examples/WeatherForcast/example_long/sample.txt","w")
     for i in range(0,n):
         T0 = randint(1,2)
         T1 = min(max(T0+randint(-1,1),-2),2)
@@ -38,6 +38,6 @@ def SampleGenerate(n,l):
     f.close()
 
 if __name__ == "__main__":
-    SampleGenerate(8,20)
+    SampleGenerate(50,6)
     
 

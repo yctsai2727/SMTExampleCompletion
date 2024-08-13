@@ -93,13 +93,13 @@ def get_compatible_nodes(states, s, exclude=[]):
 	# pair_nodes = sorted(pair_nodes, key=lambda x: sort_nodes_by_cf_diff(x[0], x[1]))
 	return pair_nodes
 
-def merge_compatible_nodes(pair, exclude_pairs, rank_state_dict,
-	mealy_machine, UCBWrapper):
+def merge_compatible_nodes(pair, exclude_pairs, rank_state_dict, mealy_machine, UCBWrapper):
 	old_mealy_machine = copy.deepcopy(mealy_machine)
 	for st in old_mealy_machine.states:
-		st.counting_function = get_state_from_id(st.state_id,mealy_machine.states).counting_function
-		st.rank = get_state_from_id(st.state_id,mealy_machine.states).rank
-		st.equivalent_states = get_state_from_id(st.state_id,mealy_machine.states).equivalent_states
+		corr_st = get_state_from_id(st.state_id,mealy_machine.states)
+		st.counting_function = corr_st.counting_function
+		st.rank = corr_st.rank
+		st.equivalent_states = corr_st.equivalent_states
 	old_rank_state_dict = copy.deepcopy(rank_state_dict)
 	merged = False
 	pair[0] = get_state_from_rank(

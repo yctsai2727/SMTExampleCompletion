@@ -84,19 +84,12 @@ def ExampleCompletion(LTL_formula, I, O, samples, reward, C, k=1,debug=False):
         next_node = list(filter(lambda y: prefix_tree.lookup[x[0]].hasChildByID(y[1][0]),enumerate(y_vq_list)))
         for j,y_p in next_node:
             i_bdd = str_to_bdd(prefix_tree.lookup[x[0]].token,ucb)
-            #print(buddy.__dict__)
-            # for ni in I:
-            #     if ni==prefix_tree.lookup[x[0]].token:
-            #         continue
-            #     i_bdd = i_bdd & buddy.bdd_not(str_to_bdd(ni,ucb))
             o_bdd = str_to_bdd(x[2],ucb)
             for no in O:
                 if no==x[2]:
                     continue
                 o_bdd = o_bdd & buddy.bdd_not(str_to_bdd(no,ucb))
             q_ances_list = [e.src for e in ucb.edges() if e.dst == y_p[1] and e.cond&(i_bdd&o_bdd)!=buddy.bddfalse]
-            # if prefix_tree.lookup[x[0]].token.split('&')[0]=='T1' and x[2]=='Off' and ucb.state_is_accepting(y_p[1]):
-            #     print("Tree node:",x[0],"\nstate reachable from:",q_ances_list)
             if len(q_ances_list) == 0:
                 continue
             sum_qqp = Plus([Plus(symb_y_vq[idk],Int(1)) for idk,y in enumerate(y_vq_list) if y[0]==x[0] and y[1] in q_ances_list])
@@ -128,9 +121,9 @@ def ExampleCompletion(LTL_formula, I, O, samples, reward, C, k=1,debug=False):
     cst_CFreal = And(CF_real_list)
 
     ###Optimality
-    L = len(samples)
+    #L = len(samples)
     sum_rew = Plus([Times(symb_x_vso[idx],Int(prefix_tree.lookup[x[0]].count*int(reward_machine.output_step(x[1],prefix_tree.lookup[x[0]].token.split('&')[0]+";"+x[2])))) for idx,x in enumerate(x_vso_list)])
-    cst_opt = GE(sum_rew,Int(L*C))
+    cst_opt = GE(sum_rew,Int(C))
 
     ###Solving the instance
     problem = And(cst_Amb,cst_RewInit,cst_RewTrans,cst_CFInit,cst_CFTrans,cst_CFreal,cst_opt)
@@ -143,6 +136,7 @@ def ExampleCompletion(LTL_formula, I, O, samples, reward, C, k=1,debug=False):
     model = get_model(formula)
     if model:
         action_set = [str(solu[0]) for solu in model if solu[1].constant_value()==1]
+        #print(action_set)
         init_state = reward_machine.initial_state
         queue = list(map(lambda a:(a,init_state),prefix_tree.root.child))
         for (node,reward_state) in queue:
@@ -158,10 +152,6 @@ def ExampleCompletion(LTL_formula, I, O, samples, reward, C, k=1,debug=False):
         examples = prefix_tree.synth()
         return examples
     else:
-        # name_x_vso = list(map(name_var,x_vso_list))
-        # id1 = name_x_vso.index("1s0Alarm")
-        # id2 = name_x_vso.index("3s4Alarm")
-        # sub_form = formula.substitute({symb_x_vso[id1]:Int(1),symb_x_vso[id2]:Int(1)})
         print("No solution found.")
         if debug:
             conj = conjunctive_partition(formula)
